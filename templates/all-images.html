@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block images %}
+
+    <div class="col-12" style="text-align: center;">
+        {% for image in all_images %}
+            <div style="
+                padding: 20px; 
+                float: left; 
+                align-items: center;
+            ">
+                <img width="100%" src="{{ url_for('images', path=image) }}" style="text-align: center;">  
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock images %}

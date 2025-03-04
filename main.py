@@ -1,3 +1,4 @@
+from glob import glob
 from typing import List
 
 from fastapi import FastAPI, File, Request, UploadFile
@@ -17,16 +18,36 @@ def home(request: Request):
     return templates.TemplateResponse('index.html', {'request': request})
 
 
-@app.post('/upload-files')
+@app.post('/upload-files', response_class=HTMLResponse)
 async def upload_files(request: Request, files: List[UploadFile] = File(...)):
-    for file in files:
-        contents = await file.read()
-        with open(f'{IMAGEDIR}{file.filename}', 'wb') as f:
-            f.write(contents)
+    status = 'Falha ao enviar arquivos'
 
-    show = [file.filename for file in files]
+    try:
+        for file in files:
+            contents = await file.read()
 
-    # return {'Result': 'OK', 'filenames': [file.filename for file in files]}
+            with open(f'{IMAGEDIR}{file.filename}', 'wb') as f:
+                f.write(contents)
+
+        status = 'Arquivos enviados'
+        return templates.TemplateResponse(
+            'index.html', {'request': request, 'status': status}
+        )
+
+    except Exception:
+        return templates.TemplateResponse(
+            'index.html', {'request': request, 'status': status}
+        )
+
+
+@app.get('/all-images', response_class=HTMLResponse)
+def get_images(request: Request):
+    all_images_dir = glob(IMAGEDIR + '*')
+    all_images = []
+    for image in all_images_dir:
+        imagedir = image.replace(IMAGEDIR, '')
+        all_images.append(imagedir)
+
     return templates.TemplateResponse(
-        'index.html', {'request': request, 'show': show}
+        'all-images.html', {'request': request, 'all_images': all_images}
     )

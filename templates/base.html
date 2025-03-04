@@ -8,12 +8,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
 </head>
 
-<body>
+<body style="background-color: rgba(0, 0, 0, 0.619); color: blanchedalmond;">
     <div class="container">
-        <h1 class="page-header text-center"> FastAPI upload and show image by Jinja2 templates </h1>
-            {% block content %}
+        <h1 class="page-header text-center" style="margin:20px"> FastAPI upload and show image by Jinja2 templates </h1>
+            {% block form %}
 
-            {% endblock content %}
+            {% endblock form %}
+
+            {% block images %}
+              
+            {% endblock images %}
     </div>
 </body>
 
